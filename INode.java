@@ -15,7 +15,7 @@ class INode{
         }
         this.following = following;
         for(int i=0; i < level; i++){
-            this.following.add(null);
+            this.following.add(new LNode(null, 1));
         }
     }
 
@@ -26,12 +26,12 @@ class INode{
         LNode ln = following.get(level);
         // System.out.println("looking for=" + content +" cur=" + this.content + ", level == " + level);
 
-        if(ln != null && ln.getN().content <= content){
+        if(ln.getN() != null && ln.getN().content <= content){
             // System.out.println(n.content);
             return ln.getN().search(content, level);
         }
-        else if ((ln == null && level > 0) ||
-                (ln!= null && ln.getN().content > content && level > 0)){
+        else if ((ln.getN() == null && level > 0) ||
+                (ln.getN() != null && ln.getN().content > content && level > 0)){
             return this.search(content, level - 1);
         }
         return false;
@@ -46,24 +46,22 @@ class INode{
         // System.out.println(ins.content + " " + cur_level + " " + target_level);
         LNode ln = following.get(cur_level);
 
-        if(ln != null && ln.getN().content < ins.content){
+        if(ln.getN() != null && ln.getN().content < ins.content){
             // We insert after the next element ln.getN()
             return ln.getLength() + ln.getN().add(ins, cur_level, target_level);
         }
-        else if(ln == null || ln.getN().content > ins.content){
-           if(ln != null && target_level < cur_level){
+        else if(ln.getN() == null || ln.getN().content > ins.content){
+            if(target_level < cur_level){
                 ln.setLength(ln.getLength() + 1); // this link grows by one because we are inserting below it.
             }            
+            // 
             int offset = (cur_level > 0) ? this.add(ins, cur_level - 1, target_level): 1;
- 
-
             if(target_level >= cur_level){
             ins.following.set(cur_level, ln);
             if(ln != null){
                 // System.out.println("ln :" + ln.getLength() + " - " + offset);
                 ln.setLength(1 + ln.getLength() - offset);}
-            LNode lins = new LNode(ins, offset);
-            this.following.set(cur_level, lins);
+            this.following.set(cur_level, new LNode(ins, offset));
                 }
             return offset;  
             }
@@ -81,20 +79,17 @@ class INode{
     public void print(int i, boolean mode){
         LNode ln = following.get(i);
         if(ln != null){
-        if (!mode){
-            System.out.print(ln.getN().content + "," + ln.getLength() + " - ");
+            String u = (ln.getN() != null) ? String.valueOf(ln.getN().content): "o\n";
+            if (!mode) System.out.print(u + "," + ln.getLength() + " - ");
+            else {System.out.print(add_spaces(ln.getLength(), i) + u);}
+            if(ln.getN() != null){ln.getN().print(i, mode);}
         }
-        else{
-            System.out.print(add_spaces(ln.getLength(), i) + ln.getN().content);
-        }
-        ln.getN().print(i, mode);
-        }
-        else System.out.println(" - o \n");
+        else{System.out.println(" - o \n");}
     }
 
     public void print(boolean mode){
         for(int i=following.size() - 1; i >= 0; i--){
-            if(following.get(i) != null) {
+            if(following.get(i).getN() != null) {
                 System.out.print("o");
                 this.print(i, mode);
             }
