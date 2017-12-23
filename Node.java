@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
 class Node{
-    public int content;
-    public ArrayList<Node> following = new ArrayList<Node>();
+    private int content;
+    private ArrayList<Node> following = new ArrayList<Node>();
 
     public Node(int content, ArrayList<Node> following, int level){
         this.content = content;
@@ -13,7 +13,6 @@ class Node{
         for(int i=0; i < level; i++){
             this.following.add(null);
         }
-
     }
 
     public Node(int content, Node next_node){
@@ -67,12 +66,12 @@ class Node{
     }
 
     public void print(int i){
-        System.out.print(content + " - ");
         if(following.get(i) != null){
+        System.out.print(content + " - ");
         following.get(i).print(i);
         }
         else{
-        System.out.println("\n");
+        System.out.println("o \n");
         }
     }
 

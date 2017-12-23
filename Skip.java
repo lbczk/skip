@@ -1,10 +1,10 @@
 import java.util.Random;
 
 public class Skip{
-    public Node root;
-    public static double p=.5;
-    public static Random randGen = new Random();
-    public final int width;
+    private Node root;
+    private static double p=.5;
+    private static Random randGen = new Random();
+    private final int width;
 
     public Skip(int content, int width){
         this.width = width;
@@ -27,7 +27,7 @@ public class Skip{
         return root.search(content);
     }
 
-    public int gen_level(){
+    private int gen_level(){
         int res = 0;
         while(Math.random() > 1 - p){
             res++;
