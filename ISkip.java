@@ -27,6 +27,11 @@ public class ISkip{
         return root.search(content);
     }
 
+    public int get(int index){
+        return root.get(index);
+        // return root.getFollowing().get(0).getN().get(index);
+    }
+
     private int gen_level(){
         int res = 0;
         while(Math.random() > 1 - p){

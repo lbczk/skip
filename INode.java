@@ -19,6 +19,10 @@ class INode{
         }
     }
 
+    public ArrayList<LNode> getFollowing(){
+        return this.following;
+    }
+
     public boolean search(int content, int level){
         if(this.content == content){
             return true;
@@ -58,9 +62,8 @@ class INode{
             int offset = (cur_level > 0) ? this.add(ins, cur_level - 1, target_level): 1;
             if(target_level >= cur_level){
             ins.following.set(cur_level, ln);
-            if(ln != null){
                 // System.out.println("ln :" + ln.getLength() + " - " + offset);
-                ln.setLength(1 + ln.getLength() - offset);}
+            ln.setLength(1 + ln.getLength() - offset);
             this.following.set(cur_level, new LNode(ins, offset));
                 }
             return offset;  
@@ -69,13 +72,24 @@ class INode{
         return -1;
     }
 
-
     public String add_spaces(int length, int i){
         if(i==0) return " - ";
         else{
             return " " + String.format("%0" + (5 * length - 4) + "d", 0).replace("0", "-") + " ";}
     }
 
+    public int get(int index){
+        // Could be done without a while loop
+        if(index == 0) return this.content;
+        int i = this.following.size() - 1;
+        LNode ln = this.following.get(i);
+        while((ln.getN() == null || ln.getLength() >= index) && i-- > 0)
+        {
+            ln = this.following.get(i);
+        }
+        return ln.getN().get(index - ln.getLength());
+    }
+    
     public void print(int i, boolean mode){
         LNode ln = following.get(i);
         if(ln != null){
